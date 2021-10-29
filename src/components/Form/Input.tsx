@@ -18,7 +18,6 @@ export function Input({ name, label, ...props }: InputProps) {
         _hover={{
           bgColor: 'gray.900',
         }}
-        size="lg"
         {...props}
       />
     </FormControl>
