@@ -23,7 +23,7 @@ export function Header() {
         <Input
           color="gray.50"
           variant="unstyled"
-          placeholder="buscar na plataforma"
+          placeholder="search on the platform"
           px="4"
           mr="4"
           _placeholder={{
