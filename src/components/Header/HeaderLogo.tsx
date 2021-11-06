@@ -5,7 +5,7 @@ export default function HeaderLogo() {
   return (
     <NextLink href="/">
       <Link _hover={{ textDecoration: 'none', cursor: 'pointer' }}>
-        <Text fontSize="3xl" fontWeight="bold" letterSpacing="tight" w="64">
+        <Text fontSize="3xl" fontWeight="bold" letterSpacing="tight">
           dash
           <Text as="span" color="pink.500">
             .
