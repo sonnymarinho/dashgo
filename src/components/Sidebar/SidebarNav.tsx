@@ -1,6 +1,6 @@
 import { Stack } from '@chakra-ui/react';
-import { RiDashboardLine, RiContactsLine, RiInputMethodLine, RiGitMergeLine } from 'react-icons/ri';
-import { useState } from 'react';
+import { RiContactsLine, RiDashboardLine, RiGitMergeLine, RiInputMethodLine } from 'react-icons/ri';
+import ROUTES from '../../config/routes';
 import NavLink from './NavLink';
 import NavSection from './NavSection';
 
@@ -8,12 +8,12 @@ export default function SidebarNav() {
   return (
     <Stack spacing="12" align="flex-start">
       <NavSection title="GENERAL">
-        <NavLink icon={RiDashboardLine} title="Dashboard" />
-        <NavLink icon={RiContactsLine} title="Users" />
+        <NavLink icon={RiDashboardLine} title="Dashboard" to={ROUTES.DASHBOARD} />
+        <NavLink icon={RiContactsLine} title="Users" to={ROUTES.USERS} />
       </NavSection>
       <NavSection title="AUTOMATION">
-        <NavLink icon={RiInputMethodLine} title="Forms" />
-        <NavLink icon={RiGitMergeLine} title="Automation" />
+        <NavLink icon={RiInputMethodLine} title="Forms" to={''} />
+        <NavLink icon={RiGitMergeLine} title="Automation" to={''} />
       </NavSection>
     </Stack>
   );

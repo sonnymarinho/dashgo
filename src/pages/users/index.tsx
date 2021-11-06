@@ -1,10 +1,32 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Heading,
+  Icon,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  useBreakpointValue,
+} from '@chakra-ui/react';
+import NextLink from 'next/link';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
+import ROUTES from '../../config/routes';
 
 export default function UsersList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
+
   return (
     <Box>
       <Header />
@@ -16,26 +38,28 @@ export default function UsersList() {
             <Heading size="lg" fontWeight="normal" as="h2">
               Users
             </Heading>
-            <Button as="a" size="sm" fontSize="small" colorScheme="pink" leftIcon={<Icon as={RiAddLine} />}>
-              Create new
-            </Button>
+            <NextLink href={ROUTES.CREATE_USER} passHref>
+              <Button as="a" size="sm" fontSize="small" colorScheme="pink" leftIcon={<Icon as={RiAddLine} />}>
+                Create new
+              </Button>
+            </NextLink>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
-                <Th px="6" color="gray.300" witdth="8">
+                <Th px={['4', '4', '6']} color="gray.300" width="8">
                   <Checkbox colorScheme="pink" />
                 </Th>
                 <Th>User</Th>
-                <Th>Registration date</Th>
+                {isWideVersion && <Th>Registration date</Th>}
                 <Th w="8">Action</Th>
               </Tr>
             </Thead>
             <Tbody>
               {Array.from({ length: 5 }).map((_, index) => (
                 <Tr key={index} px="6">
-                  <Td>
+                  <Td px={['4', '4', '6']}>
                     <Checkbox colorScheme="pink" />
                   </Td>
                   <Td>
@@ -46,7 +70,7 @@ export default function UsersList() {
                       </Text>
                     </Box>
                   </Td>
-                  <Td>08 de Agosto de 2021</Td>
+                  {isWideVersion && <Td>08 de Agosto de 2021</Td>}
                   <Td>
                     <Button
                       as="a"
@@ -56,7 +80,7 @@ export default function UsersList() {
                       color="gray.800"
                       leftIcon={<Icon as={RiPencilLine} />}
                     >
-                      Edit
+                      {isWideVersion && 'Edit'}
                     </Button>
                   </Td>
                 </Tr>
