@@ -1,4 +1,4 @@
-import { Flex, SimpleGrid, Box, Text, theme } from '@chakra-ui/react';
+import { Box, Flex, SimpleGrid, Text, theme } from '@chakra-ui/react';
 import { ApexOptions } from 'apexcharts';
 import dynamic from 'next/dynamic';
 import { Header } from '../components/Header';
