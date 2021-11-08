@@ -6,6 +6,12 @@ import { Sidebar } from '../components/Sidebar';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
+const randomPercent = (length: number) => {
+  return Array.from({ length }).map(() => {
+    return Math.floor(Math.random() * 100);
+  });
+};
+
 const options: ApexOptions = {
   chart: {
     toolbar: {
@@ -56,12 +62,14 @@ const options: ApexOptions = {
   },
 };
 
-const series = [
-  {
-    name: 'series-1',
-    data: [31, 40, 28, 51, 42, 109, 100],
-  },
-];
+const getSeries = (name: string) => {
+  return [
+    {
+      name: name,
+      data: randomPercent(5),
+    },
+  ];
+};
 
 export default function Dashboard() {
   return (
@@ -75,13 +83,13 @@ export default function Dashboard() {
             <Text fontSize="large" mb="4">
               Subscribers of the week
             </Text>
-            <Chart type="area" h={160} options={options} series={series} />
+            <Chart type="area" h={160} options={options} series={getSeries('series-1')} />
           </Box>
           <Box p={['6', '8']} bg="gray.800" borderRadius={8} pb="4">
             <Text fontSize="large" mb="4">
               Opening rate
             </Text>
-            <Chart type="area" h={160} options={options} series={series} />
+            <Chart type="area" h={160} options={options} series={getSeries('series-2')} />
           </Box>
         </SimpleGrid>
       </Flex>
