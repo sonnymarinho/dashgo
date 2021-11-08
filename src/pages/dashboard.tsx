@@ -66,7 +66,7 @@ const getSeries = (name: string) => {
   return [
     {
       name: name,
-      data: randomPercent(5),
+      data: randomPercent(7),
     },
   ];
 };
