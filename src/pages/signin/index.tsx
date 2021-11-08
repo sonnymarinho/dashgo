@@ -30,6 +30,8 @@ export default function Signin() {
   const handleSignin: SubmitHandler<SignInFormData> = async formData => {
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    console.info('form data: ', formData);
+
     router.push('/dashboard');
   };
 

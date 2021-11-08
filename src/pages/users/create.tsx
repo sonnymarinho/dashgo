@@ -3,15 +3,53 @@ import NextLink from 'next/link';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
+import * as yup from 'yup';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+type createNewUserFormData = {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+const createNewUserSchema = yup.object().shape({
+  name: yup.string().required(),
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+  password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+});
 
 export default function UserCreate() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    resolver: yupResolver(createNewUserSchema),
+  });
+
+  const handleCreateNewUser: SubmitHandler<createNewUserFormData> = async formData => {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    console.info('form data: ', formData);
+  };
+
   return (
     <Box>
       <Header />
       <Flex w="100%" my="6" maxW={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box flex="1" borderRadius={['6', '8']} bg="gray.800" p={['6', '8']}>
+        <Box
+          as="form"
+          flex="1"
+          borderRadius={['6', '8']}
+          bg="gray.800"
+          p={['6', '8']}
+          onSubmit={handleSubmit(handleCreateNewUser)}
+        >
           <Heading size="lg" fontWeight="normal">
             Create user
           </Heading>
@@ -19,23 +57,37 @@ export default function UserCreate() {
 
           <VStack spacing={8}>
             <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-              <Input name="name" label="Full Name" />
-              <Input name="email" type="email" label="E-mail" />
+              <Input label="Full Name" {...register('name')} errors={errors} isDisabled={isSubmitting} />
+              <Input type="email" label="E-mail" {...register('email')} errors={errors} isDisabled={isSubmitting} />
             </SimpleGrid>
             <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-              <Input name="password" type="password" label="Password" />
-              <Input name="password_confirmation" type="password" label="Password Confirmation" />
+              <Input
+                type="password"
+                label="Password"
+                {...register('password')}
+                errors={errors}
+                isDisabled={isSubmitting}
+              />
+              <Input
+                type="password"
+                label="Password Confirmation"
+                {...register('password_confirmation')}
+                errors={errors}
+                isDisabled={isSubmitting}
+              />
             </SimpleGrid>
           </VStack>
 
           <Flex mt={['6', '8']} justify="flex-end">
             <HStack spacing="4">
               <NextLink href="/users" passHref>
-                <Button as="a" colorScheme="whiteAlpha">
+                <Button as="a" colorScheme="whiteAlpha" isDisabled={isSubmitting}>
                   Cancel
                 </Button>
               </NextLink>
-              <Button colorScheme="pink">Save</Button>
+              <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>
+                Save
+              </Button>
             </HStack>
           </Flex>
         </Box>
