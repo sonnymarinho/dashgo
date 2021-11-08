@@ -12,8 +12,8 @@ export default function SidebarNav() {
         <NavLink icon={RiContactsLine} title="Users" to={ROUTES.USERS} />
       </NavSection>
       <NavSection title="AUTOMATION">
-        <NavLink icon={RiInputMethodLine} title="Forms" to={''} />
-        <NavLink icon={RiGitMergeLine} title="Automation" to={''} />
+        <NavLink icon={RiInputMethodLine} title="Forms" to={'#'} />
+        <NavLink icon={RiGitMergeLine} title="Automation" to={'#'} />
       </NavSection>
     </Stack>
   );
