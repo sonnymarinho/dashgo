@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,19 +14,25 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
-} from '@chakra-ui/react';
-import NextLink from 'next/link';
-import { RiAddLine, RiPencilLine } from 'react-icons/ri';
-import { Header } from '../../components/Header';
-import Pagination from '../../components/Pagination';
-import { Sidebar } from '../../components/Sidebar';
-import ROUTES from '../../config/routes';
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { Header } from "../../components/Header";
+import Pagination from "../../components/Pagination";
+import { Sidebar } from "../../components/Sidebar";
+import ROUTES from "../../config/routes";
 
 export default function UsersList() {
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/users")
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }, []);
 
   return (
     <Box>
@@ -39,7 +46,13 @@ export default function UsersList() {
               Users
             </Heading>
             <NextLink href={ROUTES.CREATE_USER} passHref>
-              <Button as="a" size="sm" fontSize="small" colorScheme="pink" leftIcon={<Icon as={RiAddLine} />}>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="small"
+                colorScheme="pink"
+                leftIcon={<Icon as={RiAddLine} />}
+              >
                 Create new
               </Button>
             </NextLink>
@@ -48,7 +61,7 @@ export default function UsersList() {
           <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
-                <Th px={['4', '4', '6']} color="gray.300" width="8">
+                <Th px={["4", "4", "6"]} color="gray.300" width="8">
                   <Checkbox colorScheme="pink" />
                 </Th>
                 <Th>User</Th>
@@ -59,7 +72,7 @@ export default function UsersList() {
             <Tbody>
               {Array.from({ length: 5 }).map((_, index) => (
                 <Tr key={index} px="6">
-                  <Td px={['4', '4', '6']}>
+                  <Td px={["4", "4", "6"]}>
                     <Checkbox colorScheme="pink" />
                   </Td>
                   <Td>
@@ -80,7 +93,7 @@ export default function UsersList() {
                       color="gray.800"
                       leftIcon={<Icon as={RiPencilLine} />}
                     >
-                      {isWideVersion && 'Edit'}
+                      {isWideVersion && "Edit"}
                     </Button>
                   </Td>
                 </Tr>
