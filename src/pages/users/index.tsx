@@ -81,7 +81,7 @@ export default function UsersList() {
             </Flex>
           ) : error ? (
             <Flex justify="center">
-              <Text>Erro at loading user data.</Text>
+              <Text>Error at loading user data.</Text>
             </Flex>
           ) : (
             <>
