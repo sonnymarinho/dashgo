@@ -4,6 +4,7 @@ import {
   Checkbox,
   Flex,
   Heading,
+  HStack,
   Icon,
   Spinner,
   Table,
@@ -14,48 +15,18 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
-  HStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
 import { RiAddLine, RiPencilLine, RiRestartLine } from "react-icons/ri";
-import { useQuery } from "react-query";
 import { Header } from "../../components/Header";
 import Pagination from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import ROUTES from "../../config/routes";
-import { User } from "../../types/user";
-
-const formatDate = (date: Date) => {
-  return new Date(date).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-};
+import { useUsers } from "../../services/hooks/useUsers";
 
 export default function UsersList() {
-  const {
-    data: users,
-    isLoading,
-    isFetching,
-    refetch,
-    error,
-  } = useQuery<User[]>(
-    "users",
-    async () => {
-      const response = await fetch("/api/users");
-      const data = await response.json();
-
-      return data.users.map(({ createdAt, ...props }: User) => ({
-        ...props,
-        createdAt: formatDate(createdAt),
-      }));
-    },
-    {
-      staleTime: 1000 * 5,
-    }
-  );
+  const { data: users, isLoading, isFetching, refetch, error } = useUsers();
 
   const isRefetching = isFetching && !isLoading;
 

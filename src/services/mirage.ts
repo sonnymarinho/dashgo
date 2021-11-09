@@ -1,6 +1,6 @@
 import { createServer, Factory, Model } from "miragejs";
 import faker from "faker";
-import { User } from "../../types/user";
+import { User } from "../types/user";
 
 export function MakeServer() {
   return createServer({
