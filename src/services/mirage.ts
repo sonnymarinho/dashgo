@@ -33,19 +33,23 @@ export function MakeServer() {
       this.namespace = "api";
       this.timing = 750;
 
-      this.get("/users", (schema, request) => {
+      this.get("/users", function (schema, request) {
         const { page = 1, per_page = 10 } = request.queryParams;
 
         const total = schema.all("user").length;
 
-        const start = (Number(page) - 1) * Number(per_page);
-        const end = start + Number(per_page);
+        const pageStart = (Number(page) - 1) * Number(per_page);
+        const pageEnd = pageStart + Number(per_page);
 
-        const users = (this as any)
-          .serialize(schema.all("user"))
-          .users.slice(start, end);
+        const { users } = this.serialize(schema.all("user"));
 
-        return new Response(200, { "x-total-count": String(total) }, { users });
+        const parsedUsers = users ? users.slice(pageStart, pageEnd) : [];
+
+        return new Response(
+          200,
+          { "x-total-count": String(total) },
+          { users: parsedUsers }
+        );
       });
       this.post("/users");
 

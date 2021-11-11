@@ -19,6 +19,7 @@ import {
 import NextLink from "next/link";
 import React from "react";
 import { RiAddLine, RiPencilLine, RiRestartLine } from "react-icons/ri";
+import { useState } from "react";
 import { Header } from "../../components/Header";
 import Pagination from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
@@ -26,7 +27,9 @@ import ROUTES from "../../config/routes";
 import { useUsers } from "../../services/hooks/useUsers";
 
 export default function UsersList() {
-  const { data: users, isLoading, isFetching, refetch, error } = useUsers();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isFetching, refetch, error } = useUsers(currentPage);
 
   const isRefetching = isFetching && !isLoading;
 
@@ -97,7 +100,7 @@ export default function UsersList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {users?.map((user) => (
+                  {data?.users.map((user) => (
                     <Tr key={user.id} px="6">
                       <Td px={["4", "4", "6"]}>
                         <Checkbox colorScheme="pink" />
@@ -128,7 +131,11 @@ export default function UsersList() {
                 </Tbody>
               </Table>
 
-              <Pagination />
+              <Pagination
+                totalCountOfRegisters={200}
+                currentPage={currentPage}
+                onChangePage={setCurrentPage}
+              />
             </>
           )}
         </Box>
