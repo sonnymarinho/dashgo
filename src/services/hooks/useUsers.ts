@@ -1,9 +1,9 @@
-import { useQuery } from "react-query";
+import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import { STALE_TIME } from "../../config/react-query";
 import { User } from "../../types/user";
 import { api } from "../axios";
 
-type UserResponse = User & { createdAt: string };
+export type UserResponse = User & { createdAt: string };
 
 type GetUsersResponse = { users: UserResponse[]; totalCount: number };
 
@@ -15,7 +15,7 @@ const formatDate = (date: Date) => {
   });
 };
 
-export const getUsers = async (page: number): Promise<GetUsersResponse> => {
+export const getUsers = async (page: number = 1): Promise<GetUsersResponse> => {
   const { data, headers } = await api.get("/users", {
     params: { page },
   });
@@ -31,8 +31,12 @@ export const getUsers = async (page: number): Promise<GetUsersResponse> => {
   };
 };
 
-export function useUsers(page?: number) {
-  return useQuery(["users", page], async () => getUsers((page = 1)), {
+export function useUsers(
+  page?: number,
+  options?: UseQueryOptions<GetUsersResponse>
+) {
+  return useQuery(["users", page], () => getUsers((page = 1)), {
     staleTime: STALE_TIME,
+    ...(options as any),
   });
 }

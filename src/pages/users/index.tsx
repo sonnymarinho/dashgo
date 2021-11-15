@@ -25,15 +25,33 @@ import { Header } from "../../components/Header";
 import Pagination from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import ROUTES from "../../config/routes";
-import { useUsers } from "../../services/hooks/useUsers";
+import {
+  getUsers,
+  UserResponse,
+  useUsers,
+} from "../../services/hooks/useUsers";
 import { queryClient } from "../../services/queryClient";
 import { api } from "../../services/axios";
 import { STALE_TIME } from "../../config/react-query";
+import { GetServerSideProps } from "next";
 
-export default function UsersList() {
+interface UsersListProps {
+  users: UserResponse[];
+  totalCount: number;
+}
+
+export default function UsersList({ users, totalCount }: UsersListProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFetching, refetch, error } = useUsers(currentPage);
+  const { data, isLoading, isFetching, refetch, error } = useUsers(
+    currentPage,
+    {
+      initialData: {
+        users,
+        totalCount,
+      },
+    }
+  );
 
   const isRefetching = isFetching && !isLoading;
 
@@ -91,7 +109,7 @@ export default function UsersList() {
                 >
                   Create new
                 </Button>
-              </NextLink>
+              </NextLink>{" "}
             </HStack>
           </Flex>
 
@@ -168,3 +186,14 @@ export default function UsersList() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users, totalCount } = await getUsers();
+
+  return {
+    props: {
+      users,
+      totalCount,
+    },
+  };
+};
