@@ -28,6 +28,7 @@ import ROUTES from "../../config/routes";
 import { useUsers } from "../../services/hooks/useUsers";
 import { queryClient } from "../../services/queryClient";
 import { api } from "../../services/axios";
+import { STALE_TIME } from "../../config/react-query";
 
 export default function UsersList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,10 +38,16 @@ export default function UsersList() {
   const isRefetching = isFetching && !isLoading;
 
   async function handlePrefetch(userId: string) {
-    await queryClient.prefetchQuery(["user", userId], async () => {
-      const { data } = await api.get(`/users/${userId}`);
-      return data;
-    });
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const { data } = await api.get(`/users/${userId}`);
+        return data;
+      },
+      {
+        staleTime: STALE_TIME,
+      }
+    );
   }
 
   const isWideVersion = useBreakpointValue({
@@ -149,9 +156,8 @@ export default function UsersList() {
                   ))}
                 </Tbody>
               </Table>
-
               <Pagination
-                totalCountOfRegisters={200}
+                totalCountOfRegisters={data?.users.length ?? 0}
                 currentPage={currentPage}
                 onChangePage={setCurrentPage}
               />

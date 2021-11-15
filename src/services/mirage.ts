@@ -54,7 +54,14 @@ export function MakeServer() {
 
         const { users } = this.serialize(schema.all("user"));
 
-        const parsedUsers = users ? users.slice(pageStart, pageEnd) : [];
+        const parsedUsers = users
+          ? users
+              .sort(
+                (a: User, b: User) =>
+                  new Date(b.createdAt) < new Date(a.createdAt)
+              )
+              .slice(pageStart, pageEnd)
+          : [];
 
         return new Response(
           200,

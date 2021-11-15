@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Box, Stack, Text } from "@chakra-ui/react";
 import EllipsisItem from "./EllipsisItem";
 import PaginationItem from "./PaginationItem";
@@ -38,6 +39,19 @@ export default function Pagination({
         )
       : [];
 
+  const minItemInPage = useMemo(
+    () => (currentPage - 1) * registersPerPage,
+    [currentPage, registersPerPage]
+  );
+
+  const maxItemInPage = useMemo(
+    () =>
+      totalCountOfRegisters < currentPage * registersPerPage
+        ? totalCountOfRegisters
+        : currentPage * registersPerPage,
+    [totalCountOfRegisters, currentPage, registersPerPage]
+  );
+
   return (
     <Stack
       direction={["column", "row"]}
@@ -48,7 +62,8 @@ export default function Pagination({
       gridGap={["4", "0"]}
     >
       <Box>
-        <strong>0</strong> - <strong>10</strong> de <strong>100</strong>
+        <strong>{minItemInPage}</strong> - <strong>{maxItemInPage}</strong> de{" "}
+        <strong>{totalCountOfRegisters}</strong>
       </Box>
       <Stack direction="row" spacing="2">
         {currentPage > 1 + siblingsCount && (
