@@ -15,6 +15,7 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  Link,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
@@ -25,6 +26,8 @@ import Pagination from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import ROUTES from "../../config/routes";
 import { useUsers } from "../../services/hooks/useUsers";
+import { queryClient } from "../../services/queryClient";
+import { api } from "../../services/axios";
 
 export default function UsersList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +35,13 @@ export default function UsersList() {
   const { data, isLoading, isFetching, refetch, error } = useUsers(currentPage);
 
   const isRefetching = isFetching && !isLoading;
+
+  async function handlePrefetch(userId: string) {
+    await queryClient.prefetchQuery(["user", userId], async () => {
+      const { data } = await api.get(`/users/${userId}`);
+      return data;
+    });
+  }
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -107,7 +117,16 @@ export default function UsersList() {
                       </Td>
                       <Td>
                         <Box>
-                          <Text fontWeight="bold">{user.name}</Text>
+                          <Link
+                            colo="purple.400"
+                            onMouseEnter={() => handlePrefetch(user.id)}
+                            _hover={{
+                              textDecoration: "none",
+                              color: "purple.400",
+                            }}
+                          >
+                            <Text fontWeight="bold">{user.name}</Text>
+                          </Link>
                           <Text fontSize="small" color="gray.300">
                             {user.email}
                           </Text>

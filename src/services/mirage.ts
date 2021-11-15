@@ -1,9 +1,19 @@
-import { createServer, Factory, Model, Response } from "miragejs";
+import {
+  createServer,
+  Factory,
+  Model,
+  Response,
+  ActiveModelSerializer,
+} from "miragejs";
 import faker from "faker";
 import { User } from "../types/user";
 
 export function MakeServer() {
   return createServer({
+    serializers: {
+      application: ActiveModelSerializer,
+    },
+
     models: {
       user: Model.extend<Partial<User>>({}),
     },
@@ -33,6 +43,7 @@ export function MakeServer() {
       this.namespace = "api";
       this.timing = 750;
 
+      this.get("/users/:id");
       this.get("/users", function (schema, request) {
         const { page = 1, per_page = 10 } = request.queryParams;
 
