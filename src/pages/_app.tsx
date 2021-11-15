@@ -7,7 +7,9 @@ import { MakeServer } from "../services/mirage";
 import { queryClient } from "../services/queryClient";
 import { theme } from "../styles/theme";
 
-MakeServer();
+if (process.env.NODE_ENV === "development") {
+  MakeServer();
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
